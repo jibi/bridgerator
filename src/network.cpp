@@ -1,5 +1,6 @@
 #include<iostream>
 #include<sys/socket.h>
+#include<sys/epoll.h>
 #include<netinet/in.h>
 
 #include<string.h>
@@ -36,3 +37,40 @@ listener::do_accept(struct sockaddr_in *client) {
 	return accept(_socket, (struct sockaddr *) client, &len);
 }
 
+client::client(int socket) {
+	_socket = socket;
+}
+
+forwarder *
+client::forwarder() {
+	return _forwarder;
+}
+
+bool
+client::read_and_forward() {
+	char buf[1024];
+	ssize_t count;
+
+	do {
+		count = read(_socket, buf, 1024);
+	} while (count == -1 && errno == EINTR);
+
+	if (count == 0 || count == -1) {
+		return false;
+	}
+
+	//forward
+
+	std::cout << buf << std::endl;
+
+	return true;
+}
+
+forwarder::forwarder(int socket) {
+	_socket = socket;
+}
+
+int
+forwarder::socket() {
+	return _socket;
+}

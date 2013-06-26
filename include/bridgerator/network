@@ -1,3 +1,4 @@
+#include<sys/epoll.h>
 #include<netinet/in.h>
 
 class listener {
@@ -8,5 +9,26 @@ public:
 	listener(unsigned short port);
 	int start();
 	int do_accept(struct sockaddr_in *client);
+};
+
+class forwarder;
+
+class client {
+private:
+	int _socket;
+	forwarder *_forwarder;
+public:
+	client(int socket);
+	bool read_and_forward();
+	forwarder *forwarder();
+};
+
+class forwarder {
+private:
+	int _socket;
+public:
+	forwarder(int socket);
+	int socket();
+
 };
 
