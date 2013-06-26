@@ -1,0 +1,12 @@
+#include<netinet/in.h>
+
+class listener {
+private:
+	int                _socket;
+	struct sockaddr_in _addr;
+public:
+	listener(unsigned short port);
+	int start();
+	int do_accept(struct sockaddr_in *client);
+};
+
