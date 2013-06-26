@@ -1,0 +1,13 @@
+#include<sys/epoll.h>
+
+class epoll_manager {
+private:
+	int _epfd;
+	int _fd_count;
+
+public:
+	epoll_manager();
+	int add_socket(int fd);
+	int del_socket(int fd);
+	int do_wait(struct epoll_event *events);
+};
