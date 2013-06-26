@@ -1,0 +1,35 @@
+#include<vector>
+
+typedef struct {
+	std::string    address;
+	unsigned short local_port;
+	unsigned short remote_port;
+} service;
+
+
+class config {
+private:
+	std::string          _proxy_address;
+	unsigned short       _proxy_port;
+	std::vector<service> _services;
+
+	std::string read_config_file();
+
+	void parse_server(std::string value);
+
+	void parse_service(std::string value);
+
+	void parse_config_file(std::string content);
+
+public:
+	config();
+
+	std::string proxy_address();
+
+	unsigned short proxy_port();
+
+	std::size_t const services_count();
+
+	service const service_at(std::size_t pos);
+};
+
