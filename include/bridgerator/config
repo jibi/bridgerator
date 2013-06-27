@@ -1,9 +1,10 @@
 #include<vector>
 
 typedef struct {
-	std::string    address;
 	unsigned short local_port;
-	unsigned short remote_port;
+
+	std::string    proxy_address;
+	unsigned short proxy_port;
 } service;
 
 
