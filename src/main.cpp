@@ -20,8 +20,10 @@ int main() {
 	for (int i = 0; i < bt_config->services_count(); i++) {
 		int sd;
 		listener *l;
+		service  s;
 		
-		l = new listener(bt_config->service_at(i).local_port);
+		s = bt_config->service_at(i);
+		l = new listener(s.local_port, s.proxy_address, s.proxy_port);
 		sd = l->start();
 
 		if (sd == -1) {
@@ -42,9 +44,11 @@ int main() {
 			if (listeners.count(fd)) {
 				listener  *l;
 				client    *c;
+				forwarder *f;
 
 				struct sockaddr_in client_addr;
 				int c_sd;
+				int f_sd;
 
 				l = listeners[fd];
 				c_sd = l->do_accept(&client_addr);

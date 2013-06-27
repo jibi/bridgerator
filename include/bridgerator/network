@@ -1,3 +1,4 @@
+#include<iostream>
 #include<sys/epoll.h>
 #include<netinet/in.h>
 
@@ -5,8 +6,11 @@ class listener {
 private:
 	int                _socket;
 	struct sockaddr_in _addr;
+
+	std::string        _proxy_address;
+	unsigned short     _proxy_port;
 public:
-	listener(unsigned short port);
+	listener(unsigned short port, std::string proxy_address, unsigned short proxy_port);
 	int start();
 	int do_accept(struct sockaddr_in *client);
 };
