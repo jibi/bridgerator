@@ -3,8 +3,8 @@
 typedef struct {
 	unsigned short local_port;
 
-	std::string    proxy_address;
-	unsigned short proxy_port;
+	std::string    remote_address;
+	unsigned short remote_port;
 } service;
 
 

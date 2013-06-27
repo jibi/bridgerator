@@ -23,7 +23,7 @@ int main() {
 		service  s;
 		
 		s = bt_config->service_at(i);
-		l = new listener(s.local_port, s.proxy_address, s.proxy_port);
+		l = new listener(s.local_port, s.remote_address, s.remote_port);
 		sd = l->start();
 
 		if (sd == -1) {

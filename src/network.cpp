@@ -8,15 +8,17 @@
 
 #include<bridgerator/network>
 
-listener::listener(unsigned short port, std::string proxy_address, unsigned short proxy_port) {
-	_proxy_address = proxy_address;
-	_proxy_port    = proxy_port;
+listener::listener(unsigned short local_port, std::string remote_address,
+	  unsigned short remote_port) {
+
+	_remote_address = remote_address;
+	_remote_port    = remote_port;
 
 	memset(&_addr, '0', sizeof(_addr));
 
 	_addr.sin_family      = AF_INET;
 	_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	_addr.sin_port        = htons(port);
+	_addr.sin_port        = htons(local_port);
 }
 
 int

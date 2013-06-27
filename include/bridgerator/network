@@ -7,10 +7,11 @@ private:
 	int                _socket;
 	struct sockaddr_in _addr;
 
-	std::string        _proxy_address;
-	unsigned short     _proxy_port;
+	std::string        _remote_address;
+	unsigned short     _remote_port;
 public:
-	listener(unsigned short port, std::string proxy_address, unsigned short proxy_port);
+	listener(unsigned short local_port, std::string remote_address,
+	  unsigned short remote_port);
 	int start();
 	int do_accept(struct sockaddr_in *client);
 };

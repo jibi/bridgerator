@@ -48,12 +48,12 @@ config::parse_service(std::string value) {
 	s.local_port = std::atoi(field.c_str());
 
 	std::getline(is_value, field, ':');
-	s.proxy_address = field;
+	s.remote_address = field;
 
 	std::getline(is_value, field);
-	s.proxy_port = std::atoi(field.c_str());
+	s.remote_port = std::atoi(field.c_str());
 
-	if (s.proxy_address.empty() || s.local_port == 0 || s.proxy_port == 0)
+	if (s.remote_address.empty() || s.local_port == 0 || s.remote_port == 0)
 		return;
 
 	_services.push_back(s);
