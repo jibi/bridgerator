@@ -1,0 +1,45 @@
+#include<iostream>
+
+namespace socks5 {
+namespace proto {
+	const unsigned char ver = 0x05;
+	const unsigned char res = 0x00;
+
+	namespace method {
+		const unsigned char no_auth       = 0x00;
+		const unsigned char no_accettable = 0xff;
+	}
+
+	namespace cmd {
+		const unsigned char connect = 0x01;
+	}
+
+	namespace atyp {
+		const unsigned char ipv4       = 0x01;
+		const unsigned char domainname = 0x03;
+	}
+
+	namespace result {
+		const unsigned char succeded           = 0x00;
+		const unsigned char server_failure     = 0x01;
+		const unsigned char conn_not_allowed   = 0x02;
+		const unsigned char host_unreachable   = 0x03;
+		const unsigned char conn_refused       = 0x04;
+		const unsigned char ttl_expired        = 0x05;
+		const unsigned char cmd_not_supported  = 0x06;
+		const unsigned char addr_not_supported = 0x07;
+	}
+
+	namespace utils {
+		size_t append_req(unsigned char *req, size_t pos, unsigned char *what, size_t len);
+
+		size_t append_req(unsigned char *req, size_t pos, unsigned char what);
+	}
+}
+
+int handshake(int sd);
+int connect(int sd, const char *address, unsigned short port);
+int connect_socks_proxy(std::string proxy_address, unsigned short proxy_port, std::string remote_address, unsigned short remote_port);
+
+}
+
