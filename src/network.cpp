@@ -42,13 +42,19 @@ listener::do_accept(struct sockaddr_in *client) {
 	return accept(_socket, (struct sockaddr *) client, &len);
 }
 
-client::client(int socket) {
-	_socket = socket;
+std::string
+listener::remote_address() {
+	return _remote_address;
 }
 
-forwarder *
-client::forwarder() {
-	return _forwarder;
+unsigned short
+listener::remote_port() {
+	return _remote_port;
+}
+
+client::client(int socket, int forwarder_socket) {
+	_socket = socket;
+	_forwarder_socket = forwarder_socket;
 }
 
 bool
@@ -64,18 +70,31 @@ client::read_and_forward() {
 		return false;
 	}
 
-	//forward
-
-	std::cout << buf << std::endl;
+	write(_forwarder_socket, buf, count);
 
 	return true;
 }
 
-forwarder::forwarder(int socket) {
+forwarder::forwarder(int socket, int client_socket) {
 	_socket = socket;
+	_client_socket = client_socket;
 }
 
-int
-forwarder::socket() {
-	return _socket;
+bool
+forwarder::read_and_deliver() {
+	char buf[1024];
+	ssize_t count;
+
+	do {
+		count = read(_socket, buf, 1024);
+	} while (count == -1 && errno == EINTR);
+
+	if (count == 0 || count == -1) {
+		return false;
+	}
+
+	write(_client_socket, buf, count);
+
+	return true;
 }
+

@@ -14,6 +14,9 @@ public:
 	  unsigned short remote_port);
 	int start();
 	int do_accept(struct sockaddr_in *client);
+
+	std::string remote_address();
+	unsigned short remote_port();
 };
 
 class forwarder;
@@ -21,19 +24,18 @@ class forwarder;
 class client {
 private:
 	int _socket;
-	forwarder *_forwarder;
+	int _forwarder_socket;
 public:
-	client(int socket);
+	client(int socket, int forwarder_socket);
 	bool read_and_forward();
-	forwarder *forwarder();
 };
 
 class forwarder {
 private:
 	int _socket;
+	int _client_socket;
 public:
-	forwarder(int socket);
-	int socket();
-
+	forwarder(int socket, int client_socket);
+	bool read_and_deliver();
 };
 

@@ -4,6 +4,7 @@
 #include<bridgerator/config>
 #include<bridgerator/epoll_manager>
 #include<bridgerator/network>
+#include<bridgerator/socks5>
 
 #include<unistd.h>
 
@@ -58,10 +59,22 @@ int main() {
 					continue;
 				}
 
-				c = new client(c_sd);
-				clients[c_sd] = c;
+				f_sd = socks5::connect_socks_proxy(bt_config->proxy_address(), bt_config->proxy_port(),
+				  l->remote_address(), l->remote_port());
+
+				if (f_sd == -1) {
+					std::cout << "Failed to connect to remote host" << std::endl;
+					continue;
+				}
+
+				c = new client(c_sd, f_sd);
+				f = new forwarder(f_sd, c_sd);
+
+				clients[c_sd]    = c;
+				forwarders[f_sd] = f;
 
 				e.add_socket(c_sd);
+				e.add_socket(f_sd);
 			} else if (clients.count(fd)) {
 				client *c;
 
@@ -70,10 +83,20 @@ int main() {
 					delete c;
 					clients.erase(fd);
 
+					/* TODO get fw */
+
 					e.del_socket(fd);
 				}
-
 			} else if (forwarders.count(fd)) {
+				forwarder *f;
+
+				f = forwarders[fd];
+				if (! f->read_and_deliver()) {
+					delete f;
+					forwarders.erase(fd);
+
+					e.del_socket(fd);
+				}
 
 			} else {
 				/* no reason this branch should be reached. */
