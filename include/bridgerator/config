@@ -1,5 +1,7 @@
 #include<vector>
 
+namespace bridgerator {
+
 typedef struct {
 	unsigned short local_port;
 
@@ -33,4 +35,4 @@ public:
 
 	service const service_at(std::size_t pos);
 };
-
+}

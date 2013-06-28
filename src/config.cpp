@@ -9,6 +9,8 @@
 
 #include<bridgerator/config>
 
+namespace bridgerator {
+
 std::string
 config::read_config_file() {
 	struct passwd *pw = getpwuid(getuid());
@@ -106,3 +108,4 @@ config::service_at(std::size_t pos) {
 	return _services.at(pos);
 }
 
+}

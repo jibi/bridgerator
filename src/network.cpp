@@ -12,6 +12,8 @@
 #include<bridgerator/epoll_manager>
 #include<bridgerator/socks5>
 
+namespace bridgerator {
+
 extern config *bt_config;
 extern std::unordered_map<int, listener *>  listeners;
 extern std::unordered_map<int, client *>    clients;
@@ -27,6 +29,8 @@ listener::listener(unsigned short local_port, std::string remote_address,
 	memset(&_addr, '0', sizeof(_addr));
 
 	_addr.sin_family      = AF_INET;
+
+	/* TODO: select the address to bind on */
 	_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	_addr.sin_port        = htons(local_port);
 }
@@ -158,7 +162,7 @@ handle_new_client(int sd) {
 	}
 
 	f_sd = socks5::connect_socks_proxy(bt_config->proxy_address(), bt_config->proxy_port(),
-	  l->remote_address(), l->remote_port());
+					   l->remote_address(), l->remote_port());
 
 	if (f_sd == -1) {
 		std::cout << "Failed to connect to remote host" << std::endl;
@@ -225,5 +229,6 @@ epoll_loop() {
 			}
 		}
 	}
+}
 }
 

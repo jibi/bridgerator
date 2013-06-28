@@ -8,6 +8,7 @@
 #include<iostream>
 #include<bridgerator/socks5>
 
+namespace bridgerator {
 namespace socks5 {
 
 namespace proto {
@@ -72,7 +73,7 @@ connect(int sd, const char *address, unsigned short port) {
 	read(sd, res, 255 + 8);
 
 	if (res[1] == proto::result::succeded) {
-		/* todo: extract remote address and port */
+		/* TODO: extract remote address and port */
 		return 0;
 	} else {
 		std::cout << "err: " << (int) res[1] << std::endl;
@@ -106,4 +107,4 @@ connect_socks_proxy(std::string proxy_address, unsigned short proxy_port,
 	return -1;
 }
 }
-
+}

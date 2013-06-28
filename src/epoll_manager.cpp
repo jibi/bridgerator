@@ -4,6 +4,8 @@
 
 #include<bridgerator/epoll_manager>
 
+namespace bridgerator {
+
 static const int max_events = 64;
 
 epoll_manager::epoll_manager() {
@@ -30,4 +32,5 @@ epoll_manager::del_socket(int fd) {
 int
 epoll_manager::do_wait(struct epoll_event *events) {
 	return epoll_wait(_epfd, events, _fd_count, -1);
+}
 }

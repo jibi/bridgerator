@@ -1,5 +1,7 @@
 #include<sys/epoll.h>
 
+namespace bridgerator {
+
 class epoll_manager {
 private:
 	int _epfd;
@@ -11,3 +13,4 @@ public:
 	int del_socket(int fd);
 	int do_wait(struct epoll_event *events);
 };
+}

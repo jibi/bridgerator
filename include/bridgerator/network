@@ -2,6 +2,8 @@
 #include<sys/epoll.h>
 #include<netinet/in.h>
 
+namespace bridgerator {
+
 class listener {
 private:
 	int                _socket;
@@ -43,3 +45,5 @@ public:
 
 void init_listeners();
 void epoll_loop();
+
+}

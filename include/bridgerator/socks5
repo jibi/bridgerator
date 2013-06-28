@@ -1,5 +1,6 @@
 #include<iostream>
 
+namespace bridgerator {
 namespace socks5 {
 namespace proto {
 	const unsigned char ver = 0x05;
@@ -32,7 +33,6 @@ namespace proto {
 
 	namespace utils {
 		size_t append_req(unsigned char *req, size_t pos, unsigned char *what, size_t len);
-
 		size_t append_req(unsigned char *req, size_t pos, unsigned char what);
 	}
 }
@@ -42,4 +42,4 @@ int connect(int sd, const char *address, unsigned short port);
 int connect_socks_proxy(std::string proxy_address, unsigned short proxy_port, std::string remote_address, unsigned short remote_port);
 
 }
-
+}
