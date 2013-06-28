@@ -6,8 +6,6 @@
 #include<bridgerator/network>
 #include<bridgerator/socks5>
 
-#include<unistd.h>
-
 using namespace bridgerator;
 
 namespace bridgerator {
@@ -18,7 +16,8 @@ std::unordered_map<int, forwarder *> forwarders;
 epoll_manager e;
 }
 
-int main() {
+int
+main() {
 	bt_config = new config();
 	init_listeners();
 

@@ -199,7 +199,7 @@ remove_client_and_forwarder(int c_sd, int f_sd) {
 
 void
 epoll_loop() {
-	struct epoll_event events[100];
+	struct epoll_event events[max_events];
 
 	while (1) {
 		int ret = e.do_wait(events);

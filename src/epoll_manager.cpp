@@ -6,8 +6,6 @@
 
 namespace bridgerator {
 
-static const int max_events = 64;
-
 epoll_manager::epoll_manager() {
 	_epfd     = epoll_create(max_events);
 	_fd_count = 0;

@@ -2,6 +2,8 @@
 
 namespace bridgerator {
 
+const int max_events = 64;
+
 class epoll_manager {
 private:
 	int _epfd;
