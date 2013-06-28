@@ -20,5 +20,5 @@ then connect to localhost:local_port_n
 
 Problems
 -------
-At the moment it binds to 0.0.0.0.
+At the moment it binds only to localhost.
 

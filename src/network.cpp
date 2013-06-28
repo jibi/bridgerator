@@ -31,7 +31,7 @@ listener::listener(unsigned short local_port, std::string remote_address,
 	_addr.sin_family      = AF_INET;
 
 	/* TODO: select the address to bind on */
-	_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 	_addr.sin_port        = htons(local_port);
 }
 
