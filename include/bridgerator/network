@@ -39,3 +39,5 @@ public:
 	bool read_and_deliver();
 };
 
+void init_listeners();
+void epoll_loop();
