@@ -29,7 +29,7 @@ public:
 
 	unsigned short proxy_port();
 
-	std::size_t const services_count();
+	std::size_t services_count();
 
 	service const service_at(std::size_t pos);
 };

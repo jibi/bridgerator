@@ -96,7 +96,7 @@ config::proxy_port() {
 	return _proxy_port;
 }
 
-std::size_t const
+std::size_t
 config::services_count() {
 	return _services.size();
 }

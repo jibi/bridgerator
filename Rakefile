@@ -4,7 +4,7 @@ require 'rake/clean'
 NAME = 'bridgerator'
 
 CC = ENV['CC'] || 'clang++'
-CFLAGS = "#{ENV['CFLAGS']} -Wall -I ./include  --std=c++11"
+CFLAGS = "#{ENV['CFLAGS']} -Wall -I ./include  --std=c++11 -Wextra"
 
 SOURCES = FileList['src/*.cpp']
 OBJECTS = SOURCES.ext('o')

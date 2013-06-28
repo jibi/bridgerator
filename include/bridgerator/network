@@ -28,6 +28,7 @@ private:
 public:
 	client(int socket, int forwarder_socket);
 	bool read_and_forward();
+	int f_sd();
 };
 
 class forwarder {
@@ -37,6 +38,7 @@ private:
 public:
 	forwarder(int socket, int client_socket);
 	bool read_and_deliver();
+	int c_sd();
 };
 
 void init_listeners();

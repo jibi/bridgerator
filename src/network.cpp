@@ -85,6 +85,11 @@ client::read_and_forward() {
 	return true;
 }
 
+int
+client::f_sd() {
+	return _forwarder_socket;
+}
+
 forwarder::forwarder(int socket, int client_socket) {
 	_socket = socket;
 	_client_socket = client_socket;
@@ -108,9 +113,14 @@ forwarder::read_and_deliver() {
 	return true;
 }
 
+int
+forwarder::c_sd() {
+	return _client_socket;
+}
+
 void
 init_listeners() {
-	for (int i = 0; i < bt_config->services_count(); i++) {
+	for (int i = 0; i < (int) bt_config->services_count(); i++) {
 		int sd;
 		listener *l;
 		service  s;
@@ -166,6 +176,24 @@ handle_new_client(int sd) {
 }
 
 void
+remove_client_and_forwarder(int c_sd, int f_sd) {
+	client    *c;
+	forwarder *f;
+
+	c = clients[c_sd];
+	f = forwarders[f_sd];
+
+	delete c;
+	clients.erase(c_sd);
+
+	delete f;
+	forwarders.erase(f_sd);
+
+	e.del_socket(c_sd);
+	e.del_socket(f_sd);
+}
+
+void
 epoll_loop() {
 	struct epoll_event events[100];
 
@@ -173,32 +201,23 @@ epoll_loop() {
 		int ret = e.do_wait(events);
 
 		for (int i = 0; i < ret; i++) {
-			int fd = events[i].data.fd;
+			int sd = events[i].data.fd;
 
-			if (listeners.count(fd)) {
-				handle_new_client(fd);
+			if (listeners.count(sd)) {
+				handle_new_client(sd);
 
-			} else if (clients.count(fd)) {
-				client *c;
+			} else if (clients.count(sd)) {
+				client *c = clients[sd];
 
-				c = clients[fd];
 				if (! c->read_and_forward()) {
-					delete c;
-					clients.erase(fd);
+					remove_client_and_forwarder(sd, c->f_sd());
 
-					/* TODO get fw */
-
-					e.del_socket(fd);
 				}
-			} else if (forwarders.count(fd)) {
-				forwarder *f;
+			} else if (forwarders.count(sd)) {
+				forwarder *f = forwarders[sd];
 
-				f = forwarders[fd];
 				if (! f->read_and_deliver()) {
-					delete f;
-					forwarders.erase(fd);
-
-					e.del_socket(fd);
+					remove_client_and_forwarder(sd, f->c_sd());
 				}
 
 			} else {
