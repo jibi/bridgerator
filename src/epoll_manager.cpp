@@ -24,6 +24,7 @@ epoll_manager::add_socket(int fd) {
 
 int
 epoll_manager::del_socket(int fd) {
+	_fd_count--;
 	return epoll_ctl(_epfd, EPOLL_CTL_DEL, fd, NULL);
 }
 

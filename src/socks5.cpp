@@ -72,14 +72,13 @@ connect(int sd, const char *address, unsigned short port) {
 	write(sd, req, pos);
 	read(sd, res, 255 + 8);
 
-	if (res[1] == proto::result::succeded) {
-		/* TODO: extract remote address and port */
-		return 0;
-	} else {
+	if (res[1] != proto::result::succeded) {
 		std::cout << "err: " << (int) res[1] << std::endl;
+		return -1;
 	}
 
-	return -1;
+	/* TODO: extract remote address and port */
+	return 0;
 }
 
 int
