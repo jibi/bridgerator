@@ -1,12 +1,26 @@
-#include<stdio.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
-#include<netinet/in.h>
-#include<string.h>
-#include<unistd.h>
+/*
+	    DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+		    Version 2, December 2004
 
-#include<iostream>
-#include<bridgerator/socks5>
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+	    DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+*/
+
+#include <stdio.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <iostream>
+#include <bridgerator/socks5.h>
 
 namespace bridgerator {
 namespace socks5 {
@@ -14,13 +28,15 @@ namespace socks5 {
 namespace proto {
 	namespace utils {
 		size_t
-		append_req(unsigned char *req, size_t pos, unsigned char *what, size_t len) {
+		append_req(uint8_t *req, size_t pos, uint8_t *what, size_t len)
+		{
 			memcpy(req + pos, what, len);
 			return pos + len;
 		}
 
 		size_t
-		append_req(unsigned char *req, size_t pos, unsigned char what) {
+		append_req(uint8_t *req, size_t pos, uint8_t what)
+		{
 			req[pos] = what;
 			return pos + 1;
 		}
@@ -28,9 +44,10 @@ namespace proto {
 }
 
 int
-handshake(int sd) {
-	unsigned char req[3] = { proto::ver, 1, proto::method::no_auth };
-	unsigned char res[2];
+handshake(int sd)
+{
+	uint8_t req[3] = { proto::ver, 1, proto::method::no_auth };
+	uint8_t res[2];
 	ssize_t count;
 
 	write(sd, req, 3);
@@ -44,9 +61,10 @@ handshake(int sd) {
 }
 
 int
-connect(int sd, const char *address, unsigned short port) {
-	unsigned char  req[255 + 8];
-	unsigned char  res[255 + 8];
+connect(int sd, const char *address, uint16_t port)
+{
+	uint8_t  req[255 + 8];
+	uint8_t  res[255 + 8];
 	size_t         pos = 0;
 	struct in_addr ip_addr;
 
@@ -58,16 +76,16 @@ connect(int sd, const char *address, unsigned short port) {
 		size_t len = strlen(address);
 
 		pos = proto::utils::append_req(req, pos, proto::atyp::domainname);
-		pos = proto::utils::append_req(req, pos, (unsigned char) len);
-		pos = proto::utils::append_req(req, pos, (unsigned char *) address, len);
+		pos = proto::utils::append_req(req, pos, (uint8_t) len);
+		pos = proto::utils::append_req(req, pos, (uint8_t *) address, len);
 
 	} else { /* TODO: check for ipv6 */
 		pos = proto::utils::append_req(req, pos, proto::atyp::ipv4);
-		pos = proto::utils::append_req(req, pos, (unsigned char *) &ip_addr.s_addr, 4);
+		pos = proto::utils::append_req(req, pos, (uint8_t *) &ip_addr.s_addr, 4);
 	}
 
 	port = htons(port);
-	pos = proto::utils::append_req(req, pos, (unsigned char *) &port, 2);
+	pos = proto::utils::append_req(req, pos, (uint8_t *) &port, 2);
 
 	write(sd, req, pos);
 	read(sd, res, 255 + 8);
@@ -82,8 +100,8 @@ connect(int sd, const char *address, unsigned short port) {
 }
 
 int
-connect_socks_proxy(std::string proxy_address, unsigned short proxy_port,
-	  std::string remote_address, unsigned short remote_port) {
+connect_socks_proxy(std::string proxy_address, uint16_t proxy_port, std::string remote_address, uint16_t remote_port)
+{
 	struct sockaddr_in addr;
 	struct in_addr ip_addr;
 
